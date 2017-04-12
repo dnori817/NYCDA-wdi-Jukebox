@@ -69,6 +69,14 @@
 
 		stop: function() {
 			console.log("stopping");
+			if (!this.activeSong) {
+				return false;
+			}
+
+			this.activeSong.stop();
+			this.isPlaying = false;
+			this.render();
+			return this.activeSong;
 		},
 
 		change: function(song) {
@@ -114,7 +122,8 @@
 		}
 
 		stop() {
-
+			this.audio.pause();
+			this.audio.currentTime = 0;
 		}
 	}
 
