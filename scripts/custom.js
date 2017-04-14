@@ -12,16 +12,18 @@
 			this.dom = {
 				play: $(".player-control-play"),
 				stop: $(".player-control-stop"),
+				change: $(".player-control-change"),
 				next: $(".player-control-next"),
-
 				songs: $(".player-songs"),
 				song: $(".player-songs-song"),
 
 
 			};
 
+			this.addSong("songs/NaturalBornFarmer.mp3");
+			this.addSong("songs/AllGoodJunkies.mp3");
 			this.addSong("songs/PrimitivesTalk.mp3");
-			this.next(this.songs[0]);
+			this.change(this.songs[0]);
 
 			this.render();
  			this.listen();
@@ -37,15 +39,30 @@
 				}
 			}.bind(this));
 
+			this.dom.next.on("click", function() {
+				// if song is playing, clicking next will play next song;
+				if (this.isPlaying) {
+					this.next(1).play();
+				}
+				else {
+					// if song is not playing, next will queue up next song and user must hit play
+					this.next(1);
+				}
+			}.bind(this));
+
 			this.dom.stop.on("click", this.stop.bind(this));
-			this.dom.next.on("click", this.next.bind(this));
 		},
 
 		render: function() {
 			 this.dom.songs.html("");
 			for (var i = 0; i < this.songs.length; i++) {
 				var $song = this.songs[i].render();
+
 				this.dom.songs.append($song);
+
+				if (this.songs[i] === this.activeSong) {
+					$song.addClass("current-song");
+				}
 			}
 
 			// indicate play or pause
@@ -56,7 +73,7 @@
 
 		play: function(song) {
 			if (song) {
-				this.next(song);
+				this.change(song);
 			}
 
 			if (this.activeSong) {
@@ -93,7 +110,7 @@
 			return this.activeSong;
 		},
 
-		next: function(song) {
+		change: function(song) {
 			if (this.activeSong) {
 				this.activeSong.stop();
 			}
@@ -103,12 +120,32 @@
 			return this.activeSong;
 		},
 
+		next: function(direction) {
+			if (!this.activeSong) {
+				return false;
+			}
+			// Find the current song's index
+			var idx = this.songs.indexOf(this.activeSong);
+
+// Set the desired index by adding the direction, and limiting it to the
+// length of the array using a modulous operator
+			var desiredIndex = (idx + direction) % this.songs.length;
+
+
+
+// Change to the desired song
+			return this.change(this.songs[desiredIndex]);
+		},
+
 		// shuffle: function() {
 		//
 		// },
 
-		addSong: function(path) {
-			this.songs.push(new Song(path));
+		addSong: function(file) {
+			var song = new Song(file);
+			this.songs.push(song);
+			this.render();
+			return song;
 		},
 
 

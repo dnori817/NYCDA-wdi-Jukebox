@@ -4,6 +4,10 @@
 
 }
 
+.current-song {
+	background-color: red;
+}
+
 .player-control {
 	background-color: rgb(48, 49, 52);
 	position: fixed;
