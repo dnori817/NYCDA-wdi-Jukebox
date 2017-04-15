@@ -12,8 +12,8 @@
 			this.dom = {
 				play: $(".player-control-play"),
 				stop: $(".player-control-stop"),
-				change: $(".player-control-change"),
 				next: $(".player-control-next"),
+				upload: $(".player-input"),
 				songs: $(".player-songs"),
 				song: $(".player-songs-song"),
 
@@ -40,7 +40,7 @@
 			}.bind(this));
 
 			this.dom.next.on("click", function() {
-				// if song is playing, clicking next will play next song;
+				// if song is playing, clicking next will play next song automatically
 				if (this.isPlaying) {
 					this.next(1).play();
 				}
@@ -51,6 +51,19 @@
 			}.bind(this));
 
 			this.dom.stop.on("click", this.stop.bind(this));
+
+			this.dom.upload.on("change", function() {
+				var files = this.dom.upload.prop("files");
+				console.log(files);
+
+				for (var i = 0; i < files.length; i++) {
+					var file = URL.createObjectURL(files[i]);
+					this.addSong(file, {
+						title: "Uploaded song",
+						artist: "Unknown",
+					});
+				}
+			}.bind(this));
 		},
 
 		render: function() {
@@ -127,13 +140,13 @@
 			// Find the current song's index
 			var idx = this.songs.indexOf(this.activeSong);
 
-// Set the desired index by adding the direction, and limiting it to the
-// length of the array using a modulous operator
+			// Set the desired index by adding the direction, and limiting it to the
+			// length of the array using a modulous operator
 			var desiredIndex = (idx + direction) % this.songs.length;
 
 
 
-// Change to the desired song
+			// Change to the desired song
 			return this.change(this.songs[desiredIndex]);
 		},
 
