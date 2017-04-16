@@ -16,13 +16,24 @@
 				upload: $(".player-input"),
 				songs: $(".player-songs"),
 				song: $(".player-songs-song"),
+				displayArtist: $(".player-display-artist"),
+				displayTitle: $(".player-display-title"),
 
 
 			};
 
-			this.addSong("songs/NaturalBornFarmer.mp3");
-			this.addSong("songs/AllGoodJunkies.mp3");
-			this.addSong("songs/PrimitivesTalk.mp3");
+			this.addSong("songs/NaturalBornFarmer.mp3", {
+				title: "Natural Born Farmer",
+				artist: "Glassjaw",
+			});
+			this.addSong("songs/AllGoodJunkies.mp3", {
+				title: "All Good Junkies Go To Heaven",
+				artist: "Glassjaw",
+			});
+			this.addSong("songs/PrimitivesTalk.mp3", {
+				title: "The Primitives Talk",
+				artist: "Zach Hill",
+			});
 			this.change(this.songs[0]);
 
 			this.render();
@@ -59,7 +70,7 @@
 				for (var i = 0; i < files.length; i++) {
 					var file = URL.createObjectURL(files[i]);
 					this.addSong(file, {
-						title: "Uploaded song",
+						title: "Unknown title",
 						artist: "Unknown",
 					});
 				}
@@ -77,6 +88,9 @@
 					$song.addClass("current-song");
 				}
 			}
+
+
+
 
 			// indicate play or pause
 			this.dom.play.toggleClass("icon-pause",  this.isPlaying);
@@ -154,8 +168,8 @@
 		//
 		// },
 
-		addSong: function(file) {
-			var song = new Song(file);
+		addSong: function(file, meta) {
+			var song = new Song(file, meta);
 			this.songs.push(song);
 			this.render();
 			return song;
@@ -168,13 +182,33 @@
 
 // SONG CLASS
 	class Song {
-		constructor(file) {
+		constructor(file, meta) {
 			this.file = file;
+			this.meta = meta || {
+				title: "Unknown title",
+				artist: "Unknown",
+			};
 			this.audio = new Audio(file);
 		}
 
 		render() {
-			return $('<div class="player-songs-song">' + this.file + '</div>');
+			var $song = $('<div class="player-songs-song"></div>');
+			$song.append('<div class="player-songs-song-artist">' + this.meta.artist + '</div>');
+			$song.append('<div class="player-songs-song-title">' + this.meta.title + '</div>');
+
+			// if ($song === this.activeSong) {
+			// 	this.displayArtist.append('<div class="player-songs-song-artist">' + this.artist + '</div>');
+			// }
+
+
+
+
+
+			var time = this.audio.duration;
+
+			$song.append('<div class="player-songs-song-time">' + time + '</div>');
+
+			return $song;
 		}
 
 		play() {

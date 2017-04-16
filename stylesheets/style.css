@@ -8,6 +8,26 @@
 	background-color: red;
 }
 
+.player-songs-song {
+	width: 33%;
+	border: 1px solid black;
+	padding: 5px;
+	margin: 5px;
+	font-family: "Helvetica";
+}
+
+.player-songs-song-artist {
+
+}
+
+.player-songs-song-title {
+	font-size: 22px;
+}
+
+.player-songs-song-time {
+	text-align: right;
+}
+
 .player-control {
 	background-color: rgb(48, 49, 52);
 	position: fixed;
