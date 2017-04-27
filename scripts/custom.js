@@ -1,9 +1,13 @@
 /* globals $ SC */
 
+// SC.get('/tracks', { q: 'no flags to fly' }).then(function(tracks) {
+// 	console.log(tracks);
+// }.bind(this));
 
 var Jukebox = {
 	songs: [],
 	activeSong:	null,
+	activeAudio: null,
 	isPlaying: false,
 	dom: {},
 
@@ -28,9 +32,6 @@ var Jukebox = {
 		};
 
 
-		SC.get('/tracks', { q: 'no flags to fly' }).then(function(tracks) {
-			console.log(tracks);
-		}.bind(this));
 
 
 		this.addSong("songs/NaturalBornFarmer.mp3", {
@@ -94,9 +95,9 @@ var Jukebox = {
 		}.bind(this));
 
 
-		// this.dom.scInput.on("keyup", function() {
-		// 	this.load(this.dom.scInput.val());
-		// }.bind(this));
+		this.dom.scInput.on("keyup", function() {
+			this.load(this.dom.scInput.val());
+		}.bind(this));
 
 		this.dom.play.on("click", function() {
 			this.activeAudio.play();
@@ -339,6 +340,7 @@ class FileSong extends Song {
 class SoundCloudSong extends Song {
 	constructor(url) {
 		super();
+
 		SC.resolve(url)
 		.then(function(song) {
 			this.meta = {
@@ -357,8 +359,41 @@ class SoundCloudSong extends Song {
 		}.bind(this));
 	}
 
+	// render() {
+		// var input = $(".soundcloud-input");
+		// var	songArt = $(".soundcloud-song-image");
+		// var	songTitle = $(".soundcloud-song-info-title");
+		// var	songArtist = $(".soundcloud-song-info-artist");
+		// var	songDuration = $(".soundcloud-song-info-duration");
+		// var	play = $(".soundcloud-song-play");
 
-}
+
+	// 	if (this.activeSong) {
+	// 		this.dom.songArt.attr("src", this.activeSong.artwork_url);
+	// 		this.dom.songTitle.html(this.activeSong.title);
+	// 		this.dom.songArtist.html(this.activeSong.user.username);
+	//
+	// 		if (this.activeAudio) {
+	// 			this.dom.songDuration.html(this.activeAudio.duration);
+	// 			this.dom.play.addClass("canPlay");
+	// 		}
+	// 		else {
+	// 			this.dom.songDuration.html("");
+	// 			this.dom.play.removeClass("canPlay");
+	// 		}
+	// 	}
+	// 	else {
+	// 		this.dom.songArt.attr("src", "");
+	// 		this.dom.songTitle.html("");
+	// 		this.dom.songArtist.html("");
+	// 		this.dom.songDuration.html("");
+	// 		this.dom.play.removeClass("canPlay");
+	// 	}
+	// }
+ }
+
+
+
 
 $(document).ready(function() {
 	Jukebox.init();
