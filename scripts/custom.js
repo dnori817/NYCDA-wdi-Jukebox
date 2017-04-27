@@ -1,4 +1,4 @@
-/* globals $ */
+/* globals $ SC */
 
 
 var Jukebox = {
@@ -9,11 +9,15 @@ var Jukebox = {
 
 		// run this to start player
 	init: function() {
+		SC.initialize({ client_id: "fd4e76fc67798bfa742089ed619084a6" });
+
 		this.dom = {
+			upload: $(".player-input"),
+			scInput: $(".sc-input"),
+			scResults: $(".sc-results"),
 			play: $(".player-control-play"),
 			stop: $(".player-control-stop"),
 			next: $(".player-control-next"),
-			upload: $(".player-input"),
 			songs: $(".player-songs"),
 			song: $(".player-songs-song"),
 			shuffle: $(".player-control-shuffle"),
@@ -23,9 +27,16 @@ var Jukebox = {
 
 		};
 
+
+		SC.get('/tracks', { q: 'no flags to fly' }).then(function(tracks) {
+			console.log(tracks);
+		}.bind(this));
+
+
 		this.addSong("songs/NaturalBornFarmer.mp3", {
 			title: "Natural Born Farmer",
 			artist: "Glassjaw",
+
 		});
 		this.addSong("songs/AllGoodJunkies.mp3", {
 			title: "All Good Junkies Go To Heaven",
@@ -35,10 +46,14 @@ var Jukebox = {
 			title: "The Primitives Talk",
 			artist: "Zach Hill",
 		});
+		this.addSong("https://soundcloud.com/dillingerescapeplan/one-of-us-is-the-killer");
+
+
 		this.change(this.songs[0]);
 
+
 		this.render();
- 			this.listen();
+ 		this.listen();
 	},
 
 	listen: function() {
@@ -79,6 +94,22 @@ var Jukebox = {
 		}.bind(this));
 
 
+		// this.dom.scInput.on("keyup", function() {
+		// 	this.load(this.dom.scInput.val());
+		// }.bind(this));
+
+		this.dom.play.on("click", function() {
+			this.activeAudio.play();
+		}.bind(this));
+
+
+		this.dom.songs.on("click ", ".player-songs-song", function(ev) {
+			var song = $(ev.currentTarget).data("song");
+			this.play(song);
+		}.bind(this));
+
+
+
 		/* Still working on the shuffle function */
 
 		// this.dom.shuffle.on("click",  function() {
@@ -88,14 +119,17 @@ var Jukebox = {
 	},
 
 	render: function() {
-			 this.dom.songs.html("");
+			//  this.dom.songs.html("");
 		for (var i = 0; i < this.songs.length; i++) {
 			var $song = this.songs[i].render();
 
-			this.dom.songs.append($song);
+			// this.dom.songs.append($song);
 
 			if (this.songs[i] === this.activeSong) {
 				$song.addClass("current-song");
+			}
+			else {
+				$song.removeClass("current-song");
 			}
 		}
 
@@ -191,9 +225,21 @@ var Jukebox = {
 	// },
 
 	addSong: function(file, meta) {
-		var song = new Song(file, meta);
+		// var song = new Song(file, meta)
+		var song;
+
+		if (file.indexOf("soundcloud.com") !== -1) {
+			song = new SoundCloudSong(file);
+		}
+		else {
+			song = new FileSong(file, meta);
+		}
 		this.songs.push(song);
+
+		var $song = song.render();
+		this.dom.songs.append($song);
 		this.render();
+
 		return song;
 	},
 
@@ -204,39 +250,64 @@ var Jukebox = {
 
 // SONG CLASS
 class Song {
-	constructor(file, meta) {
-		this.file = file;
-		this.meta = meta || {
-			title: "Unknown title",
-			artist: "Unknown",
-		};
-		this.audio = new Audio(file);
+	// constructor(file, meta) {
+	// 	this.file = file;
+	// 	this.meta = meta || {
+	// 		title: "Unknown title",
+	// 		artist: "Unknown",
+	// 	};
+	// 	this.audio = new Audio(file);
+	// }
+	constructor() {
+		this.file = null;
+		this.meta = {};
+		this.audio = null;
+		this.$song = $('<div class="player-songs-song"></div>');
+		this.$song.data("song", this);
 	}
 
-	render() {
-		var $song = $('<div class="player-songs-song"></div>');
-		$song.append('<div class="player-songs-song-artist">' + this.meta.artist + '</div>');
-		$song.append('<div class="player-songs-song-title">' + this.meta.title + '</div>');
 
+	render() {
+		this.$song.html("");
+		this.$song.append('<div class="player-songs-song-artist">' + this.meta.artist + '</div>');
+		this.$song.append('<div class="player-songs-song-title">' + this.meta.title + '</div>');
+
+		var songAudio = this.audio;
+
+		if (songAudio) {
+			var dur = this.audio.duration;
+
+			this.$song.append('<div class="player-songs-song-time">' + dur + '</div>');
+		}
 		/* Found a function that converts seconds to hours, minutes and seconds
 		 and tweaked it to fit the format I wanted */
-		var dur = this.audio.duration;
-		var time = function(dur) {
-			  var hours   = Math.floor(dur / 3600);
-			  var minutes = Math.floor((dur - (hours * 3600)) / 60);
-			  var seconds = dur - (hours * 3600) - (minutes * 60);
-			  // round seconds
-			  seconds = Math.round(seconds);
 
-			  var result = (hours < 10 ? "0" + hours : hours);
-			    result += "h" + (minutes < 10 ? "0" + minutes : minutes);
-			result += "m" + (seconds  < 10 ? "0" + seconds : seconds) + "s";
-			return result;
-		};
+		//  if (this.audio) {
+		// 	 var songAudio = this.audio;
+		// 	 songAudio.addEventListener("loadeddata",  function() {
+		// 		 var dur = songAudio.duration;
+		// 		function time(dur) {
+		// 		  var hours   = Math.floor(dur / 3600);
+		// 		  var minutes = Math.floor((dur - (hours * 3600)) / 60);
+		// 		  var seconds = dur - (hours * 3600) - (minutes * 60);
+		// 		  // round seconds
+		// 		  seconds = Math.round(seconds);
+		//
+		// 		//   var result = (hours < 10 ? "0" + hours : hours);
+		// 		   var  result = (minutes < 10 ? "0" + minutes : minutes);
+		// 			result += "m" + (seconds  < 10 ? "0" + seconds : seconds) + "s";
+		// 			return result;
+		// 		}
+		// 		// this.$song.append('<div class="player-songs-song-time">' + time(dur) + '</div>');
+		// 	}.bind(this));
+		// }
 
-		$song.append('<div class="player-songs-song-time">' + time(dur) + '</div>');
 
-		return $song;
+
+
+
+
+		return this.$song;
 	}
 
 	play() {
@@ -251,6 +322,42 @@ class Song {
 		this.audio.pause();
 		this.audio.currentTime = 0;
 	}
+}
+
+class FileSong extends Song {
+	constructor(file, meta) {
+		super();
+		this.file = file;
+		this.meta = meta || {
+			title: "Unknown title",
+			artist: "Unkown artist",
+		};
+		this.audio = new Audio(file);
+	}
+}
+
+class SoundCloudSong extends Song {
+	constructor(url) {
+		super();
+		SC.resolve(url)
+		.then(function(song) {
+			this.meta = {
+				title: song.title,
+				artist: song.user.username,
+
+
+			};
+			return song;
+		}.bind(this))
+		.then(function(song) {
+			this.audio = new Audio(song.uri + "/stream?client_id=fd4e76fc67798bfa742089ed619084a6");
+		}.bind(this))
+		.then(function() {
+			this.render();
+		}.bind(this));
+	}
+
+
 }
 
 $(document).ready(function() {

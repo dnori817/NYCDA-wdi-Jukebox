@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" href="stylesheets/style.css">
 
+	<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
 	<script src="scripts/jquery-3.2.0.min.js"></script>
 	<script src="scripts/custom.js"></script>
 	<title>JukeBox</title>
@@ -19,9 +20,14 @@
 
 		<!-- upload file -->
 		<input type="file" accept="audio/*" multiple class="player-input">
-
+		<input
+				type="text"
+				class="sc-input"
+				placeholder="Paste in soundcloud URL"
+			/>
+			<div class="sc-results"></div>
 		<div class="player-songs">
-			<div class="player-songs-song"></div>
+			<!-- <div class="player-songs-song"></div> -->
 
 		</div>
 

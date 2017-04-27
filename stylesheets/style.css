@@ -4,6 +4,12 @@
 
 }
 
+.sc-results {
+	height: 500px;
+	width: 500px;
+	border: 1px solid black;
+}
+
 .current-song {
 	background-color: red;
 }
