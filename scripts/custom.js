@@ -17,7 +17,8 @@ var Jukebox = {
 
 		this.dom = {
 			upload: $(".player-input"),
-			scInput: $(".sc-input"),
+			scInput: $(".soundcloud-input"),
+			scUpload: $(".soundcloud-upload"),
 			scResults: $(".sc-results"),
 			play: $(".player-control-play"),
 			stop: $(".player-control-stop"),
@@ -27,6 +28,7 @@ var Jukebox = {
 			shuffle: $(".player-control-shuffle"),
 			displayArtist: $(".player-display-artist"),
 			displayTitle: $(".player-display-title"),
+
 
 
 		};
@@ -95,13 +97,11 @@ var Jukebox = {
 		}.bind(this));
 
 
-		this.dom.scInput.on("keyup", function() {
-			this.load(this.dom.scInput.val());
+		this.dom.scUpload.on("click", function() {
+			this.addSong(this.dom.scInput.val());
 		}.bind(this));
+		//
 
-		this.dom.play.on("click", function() {
-			this.activeAudio.play();
-		}.bind(this));
 
 
 		this.dom.songs.on("click ", ".player-songs-song", function(ev) {

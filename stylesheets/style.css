@@ -86,50 +86,46 @@
 }
 
 .soundcloud {
-	float: right;;
+	float: right;
 }
 
-.soundcloud-title {
+/*.soundcloud-title {
 	text-align: center;
 	font-size: 40px;
 	font-weight: 100;
 	letter-spacing: 8px;
 	margin: 0 auto 20px;
 	text-transform: uppercase;
-}
+}*/
 
 .soundcloud-input {
 	display: block;
 	width: 400px;
-	margin: 0 auto 40px;
-	padding: 0 8px;
-	height: 48px;
-	font-size: 22px;
-	font-weight: 300;
+
 }
 
-.soundcloud-song {
+/*.soundcloud-song {
 	height: 100px;
 	width: 400px;
 	margin: 0 auto;
-}
+}*/
 
-.soundcloud-song-image {
+/*.soundcloud-song-image {
 	width: 100px;
 	height: 100px;
 	float: left;
-}
+}*/
 
-.soundcloud-song-info {
+/*.soundcloud-song-info {
 	width: 300px;
 	height: 100px;
 	padding-left: 20px;
 	float: left;
-}
+}*/
 
-.soundcloud-song-play {
+/*.soundcloud-song-play {
 	display: none;
-}
-.soundcloud-song-play.canPlay {
+}*/
+/*.soundcloud-song-play.canPlay {
 	display: block;
-}
+}*/
