@@ -16,20 +16,25 @@ var Jukebox = {
 		SC.initialize({ client_id: "fd4e76fc67798bfa742089ed619084a6" });
 
 		this.dom = {
-			upload: $(".player-input"),
-			scInput: $(".soundcloud-input"),
-			scUpload: $(".soundcloud-upload"),
-			scResults: $(".sc-results"),
+			upload: $(".player-header-upload"),
+			// scInput: $(".soundcloud-input"),
+			// scUpload: $(".soundcloud-upload"),
+			// scResults: $(".sc-results"),
 			play: $(".player-control-play"),
 			stop: $(".player-control-stop"),
 			next: $(".player-control-next"),
 			songs: $(".player-songs"),
 			song: $(".player-songs-song"),
-			shuffle: $(".player-control-shuffle"),
-			displayArtist: $(".player-display-artist"),
-			displayTitle: $(".player-display-title"),
+			// shuffle: $(".player-control-shuffle"),
+			// displayArtist: $(".player-display-artist"),
+			// displayTitle: $(".player-display-title"),
 
-
+			input: $(".soundcloud-input"),
+			songArt: $(".soundcloud-song-image"),
+			songTitle: $(".soundcloud-song-info-title"),
+			songArtist: $(".soundcloud-song-info-artist"),
+			songDuration: $(".soundcloud-song-info-duration"),
+			scPlay: $(".soundcloud-song-play"),
 
 		};
 
@@ -85,7 +90,7 @@ var Jukebox = {
 		/* I borrowed the upload function from your example */
 		this.dom.upload.on("change", function() {
 			var files = this.dom.upload.prop("files");
-			console.log(files);
+			// console.log(files);
 
 			for (var i = 0; i < files.length; i++) {
 				var file = URL.createObjectURL(files[i]);
@@ -96,11 +101,13 @@ var Jukebox = {
 			}
 		}.bind(this));
 
-
-		this.dom.scUpload.on("click", function() {
-			this.addSong(this.dom.scInput.val());
+		this.dom.input.on("keyup", function() {
+			this.load(this.dom.input.val());
 		}.bind(this));
-		//
+
+		this.dom.play.on("click", function() {
+			this.activeAudio.play();
+		}.bind(this));
 
 
 
@@ -359,37 +366,7 @@ class SoundCloudSong extends Song {
 		}.bind(this));
 	}
 
-	// render() {
-		// var input = $(".soundcloud-input");
-		// var	songArt = $(".soundcloud-song-image");
-		// var	songTitle = $(".soundcloud-song-info-title");
-		// var	songArtist = $(".soundcloud-song-info-artist");
-		// var	songDuration = $(".soundcloud-song-info-duration");
-		// var	play = $(".soundcloud-song-play");
 
-
-	// 	if (this.activeSong) {
-	// 		this.dom.songArt.attr("src", this.activeSong.artwork_url);
-	// 		this.dom.songTitle.html(this.activeSong.title);
-	// 		this.dom.songArtist.html(this.activeSong.user.username);
-	//
-	// 		if (this.activeAudio) {
-	// 			this.dom.songDuration.html(this.activeAudio.duration);
-	// 			this.dom.play.addClass("canPlay");
-	// 		}
-	// 		else {
-	// 			this.dom.songDuration.html("");
-	// 			this.dom.play.removeClass("canPlay");
-	// 		}
-	// 	}
-	// 	else {
-	// 		this.dom.songArt.attr("src", "");
-	// 		this.dom.songTitle.html("");
-	// 		this.dom.songArtist.html("");
-	// 		this.dom.songDuration.html("");
-	// 		this.dom.play.removeClass("canPlay");
-	// 	}
-	// }
  }
 
 
