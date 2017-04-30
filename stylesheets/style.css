@@ -1,108 +1,114 @@
 
+@font-face {
+    font-family: "CONMAN";
+    src: url(../img/CONMAN.ttf) format("truetype");
+}
 
-.player {
+* {
+	font-family: "CONMAN";
+	color: red;
+}
+
+body {
+
+background-image: url("../img/redandblack.jpg");
+background-size: cover;
+font-family: "CONMAN";
+
 
 }
 
+
+.player {
+	position: absolute;
+	width: 100%;
+}
+
+
+.player-half {
+	/*display: inline-block;*/
+	/*float: left;*/
+	/*width: 50%;*/
+}
+
+/*************
+HEADER
+************/
+.player-header {
+	/*position: fixed;*/
+	height: 70px;
+	line-height: 70px;
+	/*border: 1px solid black;*/
+	background-color: #000;
+}
+
+.player-header-title{
+	font-size: 55px;
+	padding-top: 10px;
+	color: red;
+}
+
+
+.player-header-upload {
+	float: right;
+	color: red;
+}
+
+
+/************
+MUSIC LIBRARY
+*************/
+
+
+.player-songs {
+	padding-top: 1px;
+	width: 50%;
+	height: 100%;
+	background-color:rgba(50, 0, 0, 0.95) ;
+	margin: 0 auto;
+	border-radius: 5px;
+
+}
+
+
+/*
 .sc-results {
 	height: 500px;
 	width: 500px;
 	border: 1px solid black;
-}
+}*/
 
 .current-song {
-	background-color: red;
+	background-color: #000;
+	border-radius: 5px;
 }
 
 .player-songs-song {
-	width: 33%;
+	/*width: 100%;*/
 	border: 1px solid black;
 	padding: 5px;
 	margin: 5px;
-	font-family: "Helvetica";
+	font-family: "CONMAN";
+	color: red;
 }
 
 .player-songs-song-artist {
+	font-size: 20px;
 
 }
 
 .player-songs-song-title {
-	font-size: 22px;
+	font-size: 30px;
 }
 
 .player-songs-song-time {
 	text-align: right;
 }
 
-.player-control {
-	background-color: rgb(48, 49, 52);
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-	height: 50px;
-	display: inline;
-}
 
-.player-control .isDisabled {
-	opacity: 0.5;
-	pointer-events: none;
-}
-
-.player-control div {
-	float: left;
-
-
-}
-.player-control-left {
-	width: 30%;
-}
-
-.player-display {
-	width: 50%;
-	height: 100%;
-	border: 2px solid black;
-}
-
-.player-control-right {
-	width: auto;
-}
-
-
-.player-control-stop,
-.player-control-play,
-.player-control-next {
-
-	width: 25%;
-	height: 40px;
-	margin: 2px;
-	border-radius: 10px;
-
-}
-
-.player-control-shuffle {
-	height: 40%;
-	border-radius: 10px;
-
-}
-
-.soundcloud {
-	float: right;
-}
-
-/*.soundcloud-title {
-	text-align: center;
-	font-size: 40px;
-	font-weight: 100;
-	letter-spacing: 8px;
-	margin: 0 auto 20px;
-	text-transform: uppercase;
-}*/
-
-.soundcloud-input {
-	display: block;
-	width: 400px;
-
-}
+/**************
+ SOUNDCLOUD
+***************/
 
 /*.soundcloud-song {
 	height: 100px;
@@ -111,9 +117,9 @@
 }*/
 
 /*.soundcloud-song-image {
-	width: 100px;
-	height: 100px;
-	float: left;
+	width: 50px;
+	height: 50px;
+	float: right;
 }*/
 
 /*.soundcloud-song-info {
@@ -128,4 +134,79 @@
 }*/
 /*.soundcloud-song-play.canPlay {
 	display: block;
+}*/
+.player-control-soundcloud {
+	float: right;
+	background-color: #000;
+	height: 100%;
+	width: 60%;
+}
+
+.player-soundcloud-input {
+	width: 400px;
+}
+
+
+
+/***************
+PLAYER CONTROLS
+***************/
+
+
+.player-control {
+	background-color: rgb(50,0,0);
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 80px;
+	display: inline;
+}
+
+.player-control .isDisabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.player-control  div {
+	display: inline-block;
+	/*margin: auto;*/
+
+}
+.player-control-buttons {
+	padding-top: 5px;
+	padding-left: 180px;
+
+	width: 25%;
+}
+
+.player-display {
+}
+
+
+
+
+.player-control-play {
+	width: 60px;
+	height: 60px;
+	margin: 2px;
+	border-radius: 10px;
+
+}
+
+
+
+.player-control-stop,
+.player-control-next {
+
+	width: 40px;
+	height: 40px;
+	margin: 2px;
+	border-radius: 10px;
+
+}
+/*
+.player-control-shuffle {
+	height: 40%;
+	border-radius: 10px;
+
 }*/

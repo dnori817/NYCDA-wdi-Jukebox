@@ -17,53 +17,49 @@
 </head>
 <body>
 	<div class="player">
+		<div class="player-header">
+			<input type="file" accept="audio/*" multiple  class="player-header-upload">
+			<h1 class="player-header-title">JUKEBOX</h1>
+		</div>
 
-		<!-- upload file -->
-		<input type="file" accept="audio/*" multiple class="player-input">
 
+			<!-- upload file -->
 			<!-- <div class="sc-results"></div> -->
 		<div class="player-songs">
 			<!-- <div class="player-songs-song"></div> -->
-
 		</div>
 
-		<div class="soundcloud">
-		<!-- <h1 class="soundcloud-title">SoundCloud</h1> -->
 
-		<input
-		type="text"
-		class="soundcloud-input "
-		placeholder="Paste in soundcloud URL"
-		/>
-		<button class="soundclound-upload">add to library</button>
 
-		<!-- <div class="soundcloud-song">
-			<img class="soundcloud-song-image"/>
-			<div class="soundcloud-song-info">
-				<div class="soundcloud-song-info-title"></div>
-				<div class="soundcloud-song-info-artist"></div>
-				<div class="soundcloud-song-info-duration"></div>
-				<button class="soundcloud-song-play">Play</button>
-			</div> -->
-		</div>
-	</div>
+
 
 
 		<div class="player-control">
 
-			<div class="player-control-left">
+
+			<!-- <button class="soundclound-upload">add to library</button> -->
+				<!-- <h6 class="player-display-artist"></h6>
+				<h5 class="player-display-title"></h5> -->
+			<div class="player-control-buttons">
 				<button class="player-control-stop icon-stop"></button>
 				<button class="player-control-play"></button>
 				<button class="player-control-next icon-step-forward"></button>
 			</div>
-			<div class="player-display">
-				<h6 class="player-display-artist"></h6>
-				<h5 class="player-display-title"></h5>
-			</div>
-			<div class="player-control-right">
-				<button class="player-control-shuffle">shuffle</button>
-			</div>
 
+			<!-- <div class="player-display"> -->
+			<div class="player-control-soundcloud">
+				<input type="text" class="player-soundcloud-input " placeholder="Paste in soundcloud URL"/>
+
+				<div class="soundcloud-song">
+					<img class="soundcloud-song-image"/>
+					<div class="soundcloud-song-info">
+						<div class="soundcloud-song-info-title"></div>
+						<div class="soundcloud-song-info-artist"></div>
+						<div class="soundcloud-song-info-duration"></div>
+						<button class="soundcloud-song-play">Play</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
