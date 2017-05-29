@@ -4,6 +4,7 @@
 // 	console.log(tracks);
 // }.bind(this));
 
+
 var Jukebox = {
 	songs: [],
 	activeSong:	null,
@@ -34,7 +35,7 @@ var Jukebox = {
 			songTitle: $(".soundcloud-song-info-title"),
 			songArtist: $(".soundcloud-song-info-artist"),
 			songDuration: $(".soundcloud-song-info-duration"),
-			scPlay: $(".soundcloud-song-play"),
+			scPlay: $(".soundcloud-input"),
 
 		};
 
@@ -55,6 +56,8 @@ var Jukebox = {
 			artist: "Zach Hill",
 		});
 		this.addSong("https://soundcloud.com/dillingerescapeplan/one-of-us-is-the-killer");
+
+
 
 
 		this.change(this.songs[0]);
@@ -101,12 +104,24 @@ var Jukebox = {
 			}
 		}.bind(this));
 
-		this.dom.input.on("keyup", function() {
-			this.load(this.dom.input.val());
-		}.bind(this));
 
-		this.dom.play.on("click", function() {
-			this.activeAudio.play();
+		this.dom.scPlay.on("keypress", function() {
+			var scUrl = this.dom.input.val();
+			if (scUrl === "") {
+				alert("PLEASE ENTER VALID SOUNDCLOUD URL ");
+			}
+			 else {
+				 	this.addSong(scUrl);
+			}
+			// this.play();
+
+			// var song = new SoundCloudSong(scUrl);
+			// this.songs.push(song);
+			// var $song = song.render();
+			// this.dom.songs.append($song);
+			// this.render();
+			// console.log(song);
+			// return song;
 		}.bind(this));
 
 
@@ -363,7 +378,15 @@ class SoundCloudSong extends Song {
 		}.bind(this))
 		.then(function() {
 			this.render();
-		}.bind(this));
+		}.bind(this))
+		.catch(function(err) {
+			if (err.status === 404)
+				alert("Song Not Found!");
+			else {
+				alert ("Something went wron. Try again");
+				console.error(err);
+			}
+		});
 	}
 
 
