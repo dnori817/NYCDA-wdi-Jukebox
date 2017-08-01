@@ -105,23 +105,38 @@ var Jukebox = {
 		}.bind(this));
 
 
-		this.dom.scPlay.on("keypress", function() {
+		this.dom.scPlay.on("change", function() {
 			var scUrl = this.dom.input.val();
-			if (scUrl === "") {
-				alert("PLEASE ENTER VALID SOUNDCLOUD URL ");
-			}
-			 else {
-				 	this.addSong(scUrl);
-			}
+			// this.addSong(scUrl);
+
+
+			// if () {
+			// 	alert("PLEASE ENTER VALID SOUNDCLOUD URL ");
+			// }
+			//  else {
+			// }
 			// this.play();
 
-			// var song = new SoundCloudSong(scUrl);
-			// this.songs.push(song);
-			// var $song = song.render();
-			// this.dom.songs.append($song);
-			// this.render();
-			// console.log(song);
-			// return song;
+			var song = new SoundCloudSong(scUrl);
+
+			// if (song.status !== 404) {
+			// }
+			this.songs.push(song);
+
+			var $song = song.render();
+			if ($song.file !== null) {
+
+				this.dom.songs.append($song);
+			}
+			this.render();
+			console.log(song);
+
+			//
+			// if (song.status === 404) {
+			// 	song.remove();
+			// }
+			return song;
+
 		}.bind(this));
 
 
@@ -260,12 +275,12 @@ var Jukebox = {
 		this.songs.push(song);
 
 		var $song = song.render();
+
 		this.dom.songs.append($song);
 		this.render();
 
 		return song;
 	},
-
 
 };
 
@@ -380,10 +395,12 @@ class SoundCloudSong extends Song {
 			this.render();
 		}.bind(this))
 		.catch(function(err) {
-			if (err.status === 404)
+			if (err.status === 404) {
 				alert("Song Not Found!");
+
+			}
 			else {
-				alert ("Something went wron. Try again");
+				alert ("Something went wrong. Try again");
 				console.error(err);
 			}
 		});
