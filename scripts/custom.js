@@ -1,10 +1,4 @@
 /* globals $ SC */
-
-// SC.get('/tracks', { q: 'no flags to fly' }).then(function(tracks) {
-// 	console.log(tracks);
-// }.bind(this));
-
-
 var Jukebox = {
 	songs: [],
 	activeSong:	null,
@@ -55,6 +49,7 @@ var Jukebox = {
 			title: "The Primitives Talk",
 			artist: "Zach Hill",
 		});
+		this.addSong("https://soundcloud.com/equalvision/last-words");
 		this.addSong("https://soundcloud.com/dillingerescapeplan/one-of-us-is-the-killer");
 
 
@@ -68,6 +63,7 @@ var Jukebox = {
 	},
 
 	listen: function() {
+		// play/pause
 		this.dom.play.on("click", function() {
 			if (this.isPlaying) {
 				this.pause();
@@ -76,7 +72,7 @@ var Jukebox = {
 				this.play();
 			}
 		}.bind(this));
-
+		//next track
 		this.dom.next.on("click", function() {
 				// if song is playing, clicking next will play next song automatically
 			if (this.isPlaying) {
@@ -87,13 +83,12 @@ var Jukebox = {
 				this.next(1);
 			}
 		}.bind(this));
-
+		// stop button
 		this.dom.stop.on("click", this.stop.bind(this));
 
-		/* I borrowed the upload function from your example */
+		// upload file
 		this.dom.upload.on("change", function() {
 			var files = this.dom.upload.prop("files");
-			// console.log(files);
 
 			for (var i = 0; i < files.length; i++) {
 				var file = URL.createObjectURL(files[i]);
@@ -104,56 +99,17 @@ var Jukebox = {
 			}
 		}.bind(this));
 
-
-		this.dom.scPlay.on("change", function() {
+		// upload soundcloud url
+		this.dom.scPlay.on("change", function(event) {
 			var scUrl = this.dom.input.val();
-			// this.addSong(scUrl);
-
-
-			// if () {
-			// 	alert("PLEASE ENTER VALID SOUNDCLOUD URL ");
-			// }
-			//  else {
-			// }
-			// this.play();
-
-			var song = new SoundCloudSong(scUrl);
-
-			// if (song.status !== 404) {
-			// }
-			this.songs.push(song);
-
-			var $song = song.render();
-			if ($song.file !== null) {
-
-				this.dom.songs.append($song);
-			}
-			this.render();
-			console.log(song);
-
-			//
-			// if (song.status === 404) {
-			// 	song.remove();
-			// }
-			return song;
-
+			this.addSong(scUrl);
 		}.bind(this));
 
-
-
+		// click to play song
 		this.dom.songs.on("click ", ".player-songs-song", function(ev) {
 			var song = $(ev.currentTarget).data("song");
 			this.play(song);
 		}.bind(this));
-
-
-
-		/* Still working on the shuffle function */
-
-		// this.dom.shuffle.on("click",  function() {
-		// 	var songs = this.songs;
-		// 	this.shuffle(songs).play();
-		// }.bind(this));
 	},
 
 	render: function() {
@@ -242,28 +198,10 @@ var Jukebox = {
 			// Change to the desired song
 		return this.change(this.songs[desiredIndex]);
 	},
-/* Shuffle function work in progress */
-
-	// shuffle: function(array) {
-	// 	  var currentIndex = array.length, temporaryValue, randomIndex;
-	//
-	// 	  // While there remain elements to shuffle...
-	// 	  while (0 !== currentIndex) {
-	// 	    // Pick a remaining element...
-	// 	    randomIndex = Math.floor(Math.random() * currentIndex);
-	// 	    currentIndex -= 1;
-	//
-	// 	    // And swap it with the current element.
-	// 	    temporaryValue = array[currentIndex];
-	// 	    array[currentIndex] = array[randomIndex];
-	// 	    array[randomIndex] = temporaryValue;
-	// 	  }
-	//
-	// 	  return array;
-	// },
 
 	addSong: function(file, meta) {
 		// var song = new Song(file, meta)
+
 		var song;
 
 		if (file.indexOf("soundcloud.com") !== -1) {
@@ -304,46 +242,35 @@ class Song {
 		this.$song.data("song", this);
 	}
 
+	getTime() {
+		var songAudio = this.audio;
+
+		if (songAudio) {
+			var dur = this.audio.duration;
+			// convert time to mins and secs
+			function time(dur) {
+				var hours   = Math.floor(dur / 3600);
+			  	var minutes = Math.floor((dur - (hours * 3600)) / 60);
+			  	var seconds = dur - (hours * 3600) - (minutes * 60);
+				  // round seconds
+			  	seconds = Math.round(seconds);
+
+				 //   var result = (hours < 10 ? "0" + hours : hours);
+				 var  result = (minutes < 10 ? "0" + minutes : minutes);
+				result += "m" + (seconds  < 10 ? "0" + seconds : seconds) + "s";
+				return result;
+			}
+			this.$song.append('<div class="player-songs-song-time">' + time(dur) + '</div>');
+		}
+
+		return this.$song;
+	}
 
 	render() {
 		this.$song.html("");
 		this.$song.append('<div class="player-songs-song-artist">' + this.meta.artist + '</div>');
 		this.$song.append('<div class="player-songs-song-title">' + this.meta.title + '</div>');
-
-		var songAudio = this.audio;
-
-		if (songAudio) {
-			var dur = this.audio.duration;
-
-			this.$song.append('<div class="player-songs-song-time">' + dur + '</div>');
-		}
-		/* Found a function that converts seconds to hours, minutes and seconds
-		 and tweaked it to fit the format I wanted */
-
-		//  if (this.audio) {
-		// 	 var songAudio = this.audio;
-		// 	 songAudio.addEventListener("loadeddata",  function() {
-		// 		 var dur = songAudio.duration;
-		// 		function time(dur) {
-		// 		  var hours   = Math.floor(dur / 3600);
-		// 		  var minutes = Math.floor((dur - (hours * 3600)) / 60);
-		// 		  var seconds = dur - (hours * 3600) - (minutes * 60);
-		// 		  // round seconds
-		// 		  seconds = Math.round(seconds);
-		//
-		// 		//   var result = (hours < 10 ? "0" + hours : hours);
-		// 		   var  result = (minutes < 10 ? "0" + minutes : minutes);
-		// 			result += "m" + (seconds  < 10 ? "0" + seconds : seconds) + "s";
-		// 			return result;
-		// 		}
-		// 		// this.$song.append('<div class="player-songs-song-time">' + time(dur) + '</div>');
-		// 	}.bind(this));
-		// }
-
-
-
-
-
+		this.getTime();
 
 		return this.$song;
 	}
@@ -383,7 +310,11 @@ class SoundCloudSong extends Song {
 			this.meta = {
 				title: song.title,
 				artist: song.user.username,
-
+				image: song.artwork_url,
+				genre: song.genre,
+				description: song.description,
+				songlink: song.permalink_url,
+				userlink: song.user.permalink_url,
 
 			};
 			return song;
@@ -397,7 +328,6 @@ class SoundCloudSong extends Song {
 		.catch(function(err) {
 			if (err.status === 404) {
 				alert("Song Not Found!");
-
 			}
 			else {
 				alert ("Something went wrong. Try again");
@@ -407,7 +337,22 @@ class SoundCloudSong extends Song {
 	}
 
 
- }
+
+	render() {
+		if (this.meta.title) {
+			this.$song.html("");
+			this.$song.append('<div class="player-songs-song-genre">' + 'Genre: ' + this.meta.genre + '</div>');
+			this.$song.append('<div class="player-songs-song-artist">' + '<a href="' + this.meta.userlink + '" >' + this.meta.artist + '</a></div>');
+			this.$song.append('<div class="player-songs-song-title">' + '<a href="' + this.meta.songlink + '" >' + this.meta.title + '</div>');
+			this.$song.append('<img class="player-songs-song-image" src="' +	this.meta.image + '" />');
+			this.$song.append('<div class="player-songs-song-description">' + this.meta.description + '</div>');
+			this.getTime();
+		}
+		return this.$song;
+	}
+}
+
+
 
 
 
