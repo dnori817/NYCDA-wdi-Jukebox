@@ -12,25 +12,14 @@ var Jukebox = {
 
 		this.dom = {
 			upload: $(".player-header-upload"),
-			// scInput: $(".soundcloud-input"),
-			// scUpload: $(".soundcloud-upload"),
-			// scResults: $(".sc-results"),
+
 			play: $(".player-control-play"),
 			stop: $(".player-control-stop"),
 			next: $(".player-control-next"),
 			songs: $(".player-songs"),
 			song: $(".player-songs-song"),
-			// shuffle: $(".player-control-shuffle"),
-			// displayArtist: $(".player-display-artist"),
-			// displayTitle: $(".player-display-title"),
 
 			input: $(".soundcloud-input"),
-			songArt: $(".soundcloud-song-image"),
-			songTitle: $(".soundcloud-song-info-title"),
-			songArtist: $(".soundcloud-song-info-artist"),
-			songDuration: $(".soundcloud-song-info-duration"),
-			scPlay: $(".soundcloud-input"),
-
 		};
 
 
@@ -100,9 +89,20 @@ var Jukebox = {
 		}.bind(this));
 
 		// upload soundcloud url
-		this.dom.scPlay.on("change", function(event) {
+		this.dom.input.on("change", function(event) {
 			var scUrl = this.dom.input.val();
-			this.addSong(scUrl);
+			// this.addSong(scUrl);
+			var song = new SoundCloudSong(scUrl);
+
+			this.songs.push(song);
+
+			var $song = song.render();
+
+			this.dom.songs.append($song);
+			this.render();
+
+			return song;
+
 		}.bind(this));
 
 		// click to play song
@@ -210,6 +210,8 @@ var Jukebox = {
 		else {
 			song = new FileSong(file, meta);
 		}
+
+
 		this.songs.push(song);
 
 		var $song = song.render();
@@ -339,8 +341,8 @@ class SoundCloudSong extends Song {
 
 
 	render() {
+		this.$song.html("");
 		if (this.meta.title) {
-			this.$song.html("");
 			this.$song.append('<div class="player-songs-song-genre">' + 'Genre: ' + this.meta.genre + '</div>');
 			this.$song.append('<div class="player-songs-song-artist">' + '<a href="' + this.meta.userlink + '" >' + this.meta.artist + '</a></div>');
 			this.$song.append('<div class="player-songs-song-title">' + '<a href="' + this.meta.songlink + '" >' + this.meta.title + '</div>');
